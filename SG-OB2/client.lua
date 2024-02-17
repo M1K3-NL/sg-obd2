@@ -146,7 +146,19 @@ lib.registerContext({
   })
 
 
-RegisterNetEvent('obd2:DeleteData')
-AddEventHandler('obd2:DeleteData', function()
-print('coming soon')
-end)
+  RegisterNetEvent('obd2:DeleteData')
+  AddEventHandler('obd2:DeleteData', function()
+      local playerPed = PlayerPedId()
+      local vehiclePed = GetVehiclePedIsIn(playerPed, false)
+      if vehiclePed then
+          local state = Entity(vehiclePed).state
+          state.FaultData = nil -- Verwijder de OBD2-gegevens
+          lib.notify({
+              title = 'OBD2 Scanner',
+              description = 'Fault Data Deleted!',
+              type = 'success'
+          })
+      else
+          print("You must be in a vehicle to delete OBD2 data.")
+      end
+  end)
